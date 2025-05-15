@@ -1,21 +1,22 @@
 const { DataTypes } = require("sequelize");
-const sequelize = require("../config/databaseConfig"); // Sequelize instance
-// const generateSnowflakeId = require("../utils/generateSnowflakeId");
+const sequelize = require("../config/databaseConfig");
+const generateSnowflakeID = require("../utils/generateSnowflakeId");
 
 const User = sequelize.define(
   "User",
   {
     id: {
-      type: DataTypes.INTEGER, // Use INTEGER for auto-increment
+      type: DataTypes.STRING, // or DataTypes.BIGINT if you prefer
       primaryKey: true,
-      autoIncrement: true, // Enable auto-increment
+      defaultValue: () => generateSnowflakeID(),
     },
     username: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true, // ensures no duplicate usernames
     },
     role: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM("admin", "user", "moderator"),
       allowNull: false,
     },
   },
